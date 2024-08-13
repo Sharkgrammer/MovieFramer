@@ -6,19 +6,20 @@ from crop_image import crop_image
 
 video_path = 'shrek.mp4'
 output_folder = 'frames'
-desired_frames = 2
+desired_frames = 5
 
-image_dimen = (356, 200)  # Image width, height
+image_dimen = (300, 200)  # Image width, height
 image_quality = 30
 
 # Crop details should be smaller than then the above
-should_crop_image = False
+should_crop_image = True
 crop_dimen = (200, 200)  # Cropped image width, height
 
 in_colour = False
 
 output_byte_arr = True
 output_text_file = "frames.h"
+output_prefix = "f"
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -51,14 +52,14 @@ while video.isOpened():
 
         image = image.resize(image_dimen)
 
-        output_path = os.path.join(output_folder, f'frame_{count:04d}.jpg')
-        image.save(output_path, quality=image_quality)
-
         if should_crop_image:
             image = crop_image(image, image_dimen, crop_dimen)
 
         if output_byte_arr:
-            to_byte_arr(image, crop_dimen if output_byte_arr else image_dimen, output_text_file)
+            to_byte_arr(image, crop_dimen if output_byte_arr else image_dimen, output_text_file, output_prefix)
+        else:
+            output_path = os.path.join(output_folder, f'frame_{count:04d}.jpg')
+            image.save(output_path, quality=image_quality)
 
         count += jump
         video.set(cv2.CAP_PROP_POS_FRAMES, count)

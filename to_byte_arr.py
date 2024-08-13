@@ -3,7 +3,7 @@ counter = 1
 
 
 # Convert the image to a byte array suitable for the open source Watchy framework
-def to_byte_arr(image, image_dimen, output_text_file):
+def to_byte_arr(image, image_dimen, output_text_file, output_prefix):
     global counter
 
     image = image.convert('1')
@@ -11,8 +11,6 @@ def to_byte_arr(image, image_dimen, output_text_file):
     pixels = list(image.getdata())
 
     hex_data = []
-
-    print(image_dimen)
 
     for y in range(0, image_dimen[1]):
         for x in range(0, image_dimen[0], 8):
@@ -22,9 +20,8 @@ def to_byte_arr(image, image_dimen, output_text_file):
                     byte |= (1 << (7 - i))
             hex_data.append(f"0x{byte:02x}")
 
-    # Print out the array in the format you provided
     formatted_output = ", ".join(hex_data)
-    append_to_file(f"const unsigned char f{counter} [] PROGMEM = {{\n\t{formatted_output}\n}};", output_text_file)
+    append_to_file(f"const unsigned char {output_prefix}{counter} [] PROGMEM = {{\n\t{formatted_output}\n}};", output_text_file)
     counter += 1
 
 
