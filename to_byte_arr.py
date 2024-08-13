@@ -1,4 +1,6 @@
 # Yoinked from chatgpt and modified
+from PIL import ImageEnhance
+
 counter = 1
 
 
@@ -6,8 +8,11 @@ counter = 1
 def to_byte_arr(image, image_dimen, output_text_file, output_prefix):
     global counter
 
-    image = image.convert('1')
+    image = image.convert('L')
+    enhancer = ImageEnhance.Contrast(image)
+    image = enhancer.enhance(2.0)
 
+    image = image.convert('1')
     pixels = list(image.getdata())
 
     hex_data = []
@@ -28,3 +33,19 @@ def to_byte_arr(image, image_dimen, output_text_file, output_prefix):
 def append_to_file(byte_data, output_text_file):
     with open(output_text_file, 'a') as file:
         file.write(f"{byte_data}\n\n")
+
+
+# My watchy implementation needs a map of all the images
+# So this generates it for me
+# IT
+# tmakes me a little sad but it works
+def hacky_final_output(output_text_file, desired_frames):
+    # Final Adjustment
+    with open(output_text_file, 'a') as file:
+        file.write("const unsigned char* const fmap[] PROGMEM = {\n\t")
+
+        for x in range(1, desired_frames):
+            file.write(f"f{x},")
+
+        file.write(f"f{desired_frames}")
+        file.write("\n};")
