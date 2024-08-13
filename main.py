@@ -6,7 +6,7 @@ from crop_image import crop_image
 
 video_path = 'shrek.mp4'
 output_folder = 'frames'
-desired_frames = (60 * 24) - 4
+desired_frames = 60 * 24
 
 image_dimen = (300, 200)  # Image width, height
 image_quality = 30
@@ -58,13 +58,6 @@ while video.isOpened():
         if should_crop_image:
             image = crop_image(image, image_dimen, crop_dimen)
 
-        '''
-        image = image.convert('L')
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(2.0)
-
-        image = image.convert('1')
-        '''
 
         if output_byte_arr:
             to_byte_arr(image, crop_dimen if output_byte_arr else image_dimen, output_text_file, output_prefix)
